@@ -1,0 +1,169 @@
+{
+  "sidebar": {
+    "addBooks": "Adicionar Livros",
+    "bookDraw": "Sorteio de Livros",
+    "myBooks": "Meus Livros",
+    "favorites": "Favoritos",
+    "settings": "Configurações",
+    "about": "Sobre",
+    "help": "Ajuda"
+  },
+  "pages": {
+    "bookDraw": {
+      "title": "Sorteio de Livros",
+      "drawButton": "🔀 Sortear Livro para Ler",
+      "lastBookDrawn": "Último Livro Sorteado",
+      "noBookDrawn": "Nenhum livro sorteado ainda",
+      "pagesRead": "páginas lidas de",
+      "lastDrawDate": "Data do último sorteio:",
+      "pagesReadAfterDraw": "Páginas lidas após o último sorteio:",
+      "pagesPlaceholder": "Quantidade de páginas",
+      "updateButton": "Atualizar",
+      "readingStats": "Estatísticas de Leitura",
+      "totalBooks": "Total de Livros:",
+      "booksRead": "Livros Lidos:",
+      "booksInProgress": "Livros em Progresso:",
+      "totalPagesRead": "Páginas Lidas no Total:",
+      "mostRecentBook": "Livro Mais Recente:",
+      "overallReadingProgress": "Progresso de Leitura Geral",
+      "completed": "concluído"
+    },
+    "addBooks": {
+      "title": "Adicionar Livros",
+      "titleField": "Título",
+      "authorField": "Autor",
+      "pagesField": "Número de Páginas",
+      "statusField": "Status",
+      "addButton": "Adicionar Livro"
+    },
+    "myBooks": {
+      "title": "Meus Livros",
+      "searchPlaceholder": "Buscar livros...",
+      "sortBy": "Ordenar por:",
+      "sortOptions": {
+        "title-asc": "Título (A-Z)",
+        "title-desc": "Título (Z-A)",
+        "author-asc": "Autor (A-Z)",
+        "date-desc": "Data de inclusão (Mais recentes primeiro)"
+      },
+      "deleteSelected": "Excluir Selecionados",
+      "selectAll": "Selecionar Todos",
+      "deselectAll": "Desmarcar Todos",
+      "booksCount": "livros",
+      "searchButton": "Buscar",
+      "sortButton": "Ordenar"
+    },
+    "favorites": {
+      "title": "Livros Favoritos",
+      "emptyState": "Você ainda não adicionou nenhum favorito."
+    },
+    "settings": {
+      "title": "Configurações",
+      "appearance": "Aparência",
+      "darkMode": "Modo Escuro",
+      "language": "Idioma",
+      "selectLanguage": "Selecionar Idioma",
+      "data": "Dados",
+      "exportLibrary": "Exportar Biblioteca",
+      "importLibrary": "Importar Biblioteca",
+      "resetLibrary": "Redefinir Biblioteca"
+    },
+    "about": {
+      "title": "Sobre",
+      "version": "Versão 1.0.0",
+      "description": "Um aplicativo para gerenciamento de sua coleção de livros.",
+      "developedBy": "Desenvolvido por",
+      "contact": "Qualquer dúvida, sugestão ou bug entre em contato conosco pelo e-mail:",
+      "legalDocuments": "Documentos Legais",
+      "privacyPolicy": "Política de Privacidade",
+      "termsOfUse": "Termos de Uso"
+    },
+    "help": {
+      "title": "Ajuda",
+      "addBookTitle": "Como adicionar um livro",
+      "addBookText": "Para adicionar um novo livro à sua biblioteca, clique no botão \"Adicionar Livro\" e preencha os campos solicitados.",
+      "favoriteTitle": "Como marcar um livro como favorito",
+      "favoriteText": "Na visualização de livros, clique no ícone de estrela de qualquer livro para marcá-lo como favorito.",
+      "statusTitle": "Como alterar o status de um livro",
+      "statusText": "Você pode alterar o status de um livro (Não Lido, Lendo, Concluído) diretamente do card do livro, usando o menu suspenso.",
+      "bugsTitle": "Ainda precisa de ajustes (bugs/issues)🐞",
+      "bug1": "A exportação e importação só estão funcionando para o tipo de arquivo .CSV, se tentar outro tipo pode gerar erros.",
+      "bug2": "A opção de marcar um livro como Favorito ainda não está usual.",
+      "bug3": "Se um livro que já foi concluido sua leitura for marcado como \"Não Lido\" ou \"Lendo\" manualmente no menu \"Meus Livros\", ele poderá ser sorteado. Para que isso não aconteça certifique-se que a opção \"Concluído\" esteja marcada no card do livro.",
+      "bug4": "O \"Modo Escuro\" ainda não está com as cores corretas implementadas, espere outra versão para usá-lo.",
+      "bug5": "A barra \"Buscar\" no menu \"Meus Livros\" ainda não está funcionando, vamos corrigir no futuro.",
+      "bug6": "Se algumas vezes as caixas de digitação, como a Editar Livros, travarem e você não conseguir clicar para escrever algo, é só trocar de janela no sistema operacional (ir para outro programa e voltar para a janela do ReadLuck) pois assim voltará a funcionar normalmente os campos de edição. Estamos trabalhando corrigir isso nas próximas versões.",
+      "bug7": "A tradução para o inglês ainda não está completa, você pode encontrar algumas partes que não foram traduzidas."
+    }
+  },
+  "status": {
+    "unread": "Não Lido",
+    "reading": "Lendo",
+    "completed": "Concluído",
+    "pagesRead": "páginas lidas"
+  },
+  "modals": {
+    "editBook": {
+      "title": "Editar Livro",
+      "titleField": "Título",
+      "authorField": "Autor",
+      "pagesField": "Número de Páginas",
+      "statusField": "Status",
+      "pagesReadField": "Páginas Lidas:",
+      "coverField": "URL da Capa (opcional):",
+      "coverPlaceholder": "https://exemplo.com/capa.jpg",
+      "saveButton": "Salvar Alterações"
+    },
+    "selectedBook": {
+      "by": "por",
+      "pages": "páginas",
+      "startReading": "Começar a Ler",
+      "markAsRead": "Marcar como Lido"
+    },
+    "exportFormat": {
+      "title": "Selecionar Formato para Exportação",
+      "description": "Escolha o formato para exportar sua biblioteca:",
+      "cancelButton": "Cancelar"
+    },
+    "importFormat": {
+      "title": "Selecionar Formato para Importação",
+      "description": "Escolha o formato para importar sua biblioteca:",
+      "cancelButton": "Cancelar"
+    }
+  },
+  "footer": {
+    "text": "READLUCK - Nunca mais esqueça de um livro :)"
+  },
+  "messages": {
+    "bookDrawn": "Livro sorteado:",
+    "noAvailableBooks": "Não há livros disponíveis para sorteio. Todos os livros já foram concluídos ou sua biblioteca está vazia.",
+    "bookAdded": "Livro adicionado com sucesso!",
+    "bookUpdated": "Status do livro atualizado!",
+    "bookDeleted": "Livro excluído com sucesso!",
+    "booksDeleted": "livro(s) excluído(s) com sucesso!",
+    "addedToFavorites": "Livro adicionado aos favoritos!",
+    "removedFromFavorites": "Livro removido dos favoritos!",
+    "errorLoadingBooks": "Erro ao carregar livros para o sorteio.",
+    "errorUpdatingStatus": "Erro ao atualizar status:",
+    "errorCommunication": "Erro de comunicação:",
+    "bookNotFound": "Livro não encontrado.",
+    "errorDeleting": "Erro ao excluir livro.",
+    "errorMassDeleting": "Erro na exclusão em massa:",
+    "oldBooksMigrated": "Livros antigos migrados com sucesso!",
+    "emptyLibrary": "Sua biblioteca de sorteio está vazia ou todos os livros foram concluídos. Adicione novos livros ou altere o status dos existentes.",
+    "emptyMyBooks": "Você ainda não tem livros. Adicione seu primeiro livro!",
+    "booksRegistered": "Livros Cadastrados:",
+    "errorExporting": "Erro ao exportar:",
+    "errorExportingFormat": "Erro ao exportar em",
+    "operationCancelled": "Operação cancelada pelo usuário",
+    "exportSuccess": "livros exportados com sucesso para",
+    "importSuccess": "livros importados com sucesso.",
+    "odsExportNotification": "Exportação em ODS estará disponível em uma próxima versão",
+    "invalidPageNumber": "Por favor, insira um número válido de páginas.",
+    "pageUpdateLimit": "Você só pode adicionar mais {{paginasRestantes}} páginas. O livro tem {{totalPaginas}} páginas e você já leu {{paginasLidas}}.",
+    "pagesReadUpdated": "Páginas lidas atualizadas com sucesso!",
+    "errorUpdatingPagesRead": "Erro ao atualizar páginas lidas",
+    "positivePageNumber": "O número de páginas lidas deve ser um número positivo.",
+    "pagesReadTooHigh": "O número de páginas lidas não pode ser maior que o total de páginas do livro."
+  }
+}

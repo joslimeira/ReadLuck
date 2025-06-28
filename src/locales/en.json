@@ -1,0 +1,169 @@
+{
+  "sidebar": {
+    "addBooks": "Add Books",
+    "bookDraw": "Book Draw",
+    "myBooks": "My Books",
+    "favorites": "Favorites",
+    "settings": "Settings",
+    "about": "About",
+    "help": "Help"
+  },
+  "pages": {
+    "bookDraw": {
+      "title": "Book Draw",
+      "drawButton": "🔀 Draw Book to Read",
+      "lastBookDrawn": "Last Book Drawn",
+      "noBookDrawn": "No book drawn yet",
+      "pagesRead": "pages read of",
+      "lastDrawDate": "Last draw date:",
+      "pagesReadAfterDraw": "Pages read after last draw:",
+      "pagesPlaceholder": "Number of pages",
+      "updateButton": "Update",
+      "readingStats": "Reading Statistics",
+      "totalBooks": "Total Books:",
+      "booksRead": "Books Read:",
+      "booksInProgress": "Books in Progress:",
+      "totalPagesRead": "Total Pages Read:",
+      "mostRecentBook": "Most Recent Book:",
+      "overallReadingProgress": "Overall Reading Progress",
+      "completed": "completed"
+    },
+    "addBooks": {
+      "title": "Add Books",
+      "titleField": "Title",
+      "authorField": "Author",
+      "pagesField": "Number of Pages",
+      "statusField": "Status",
+      "addButton": "Add Book"
+    },
+    "myBooks": {
+      "title": "My Books",
+      "searchPlaceholder": "Search books...",
+      "sortBy": "Sort by:",
+      "sortOptions": {
+        "title-asc": "Title (A-Z)",
+        "title-desc": "Title (Z-A)",
+        "author-asc": "Author (A-Z)",
+        "date-desc": "Date added (Newest first)"
+      },
+      "deleteSelected": "Delete Selected",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "booksCount": "books",
+      "searchButton": "Search",
+      "sortButton": "Sort"
+    },
+    "favorites": {
+      "title": "Favorite Books",
+      "emptyState": "You haven't added any favorites yet."
+    },
+    "settings": {
+      "title": "Settings",
+      "appearance": "Appearance",
+      "darkMode": "Dark Mode",
+      "language": "Language",
+      "selectLanguage": "Select Language",
+      "data": "Data",
+      "exportLibrary": "Export Library",
+      "importLibrary": "Import Library",
+      "resetLibrary": "Reset Library"
+    },
+    "about": {
+      "title": "About",
+      "version": "Version 1.0.0",
+      "description": "An application for managing your book collection.",
+      "developedBy": "Developed by",
+      "contact": "For any questions, suggestions or bugs, contact us at:",
+      "legalDocuments": "Legal Documents",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfUse": "Terms of Use"
+    },
+    "help": {
+      "title": "Help",
+      "addBookTitle": "How to add a book",
+      "addBookText": "To add a new book to your library, click the \"Add Book\" button and fill in the required fields.",
+      "favoriteTitle": "How to mark a book as favorite",
+      "favoriteText": "In the book view, click the star icon of any book to mark it as favorite.",
+      "statusTitle": "How to change a book's status",
+      "statusText": "You can change a book's status (Unread, Reading, Completed) directly from the book card, using the dropdown menu.",
+      "bugsTitle": "Still needs adjustments (bugs/issues)🐞",
+      "bug1": "Export and import only work for .CSV file type, trying other types may cause errors.",
+      "bug2": "The option to mark a book as Favorite is not yet functional.",
+      "bug3": "If a book that has already been completed is manually marked as \"Unread\" or \"Reading\" in the \"My Books\" menu, it can be drawn. To prevent this, make sure the \"Completed\" option is marked on the book card.",
+      "bug4": "Dark Mode doesn't have the correct colors implemented yet, wait for another version to use it.",
+      "bug5": "The Search bar in the \"My Books\" menu is not working yet, we'll fix it in the future.",
+      "bug6": "If sometimes the text boxes, like Edit Books, freeze and you can't click to write something, just switch windows in the operating system (go to another program and return to the ReadLuck window) as this will make the editing fields work normally again. We're working to fix this in future versions.",
+      "bug7": "The English translation is not yet complete, you may find some parts that have not been translated."
+    }
+  },
+  "status": {
+    "unread": "Unread",
+    "reading": "Reading",
+    "completed": "Completed",
+    "pagesRead": "pages read"
+  },
+  "modals": {
+    "editBook": {
+      "title": "Edit Book",
+      "titleField": "Title",
+      "authorField": "Author",
+      "pagesField": "Number of Pages",
+      "statusField": "Status",
+      "pagesReadField": "Pages Read:",
+      "coverField": "Cover URL (optional):",
+      "coverPlaceholder": "https://example.com/cover.jpg",
+      "saveButton": "Save Changes"
+    },
+    "selectedBook": {
+      "by": "by",
+      "pages": "pages",
+      "startReading": "Start Reading",
+      "markAsRead": "Mark as Read"
+    },
+    "exportFormat": {
+      "title": "Select Format for Export",
+      "description": "Choose the format to export your library:",
+      "cancelButton": "Cancel"
+    },
+    "importFormat": {
+      "title": "Select Format for Import",
+      "description": "Choose the format to import your library:",
+      "cancelButton": "Cancel"
+    }
+  },
+  "footer": {
+    "text": "READLUCK - Never forget a book again :)"
+  },
+  "messages": {
+    "bookDrawn": "Book drawn:",
+    "noAvailableBooks": "No books available for draw. All books have been completed or your library is empty.",
+    "bookAdded": "Book added successfully!",
+    "bookUpdated": "Book status updated!",
+    "bookDeleted": "Book deleted successfully!",
+    "booksDeleted": "book(s) deleted successfully!",
+    "addedToFavorites": "Book added to favorites!",
+    "removedFromFavorites": "Book removed from favorites!",
+    "errorLoadingBooks": "Error loading books for draw.",
+    "errorUpdatingStatus": "Error updating status:",
+    "errorCommunication": "Communication error:",
+    "bookNotFound": "Book not found.",
+    "errorDeleting": "Error deleting book.",
+    "errorMassDeleting": "Error in mass deletion:",
+    "oldBooksMigrated": "Old books migrated successfully!",
+    "emptyLibrary": "Your draw library is empty or all books have been completed. Add new books or change the status of existing ones.",
+    "emptyMyBooks": "You don't have any books yet. Add your first book!",
+    "booksRegistered": "Books Registered:",
+    "errorExporting": "Error exporting:",
+    "errorExportingFormat": "Error exporting to",
+    "operationCancelled": "Operation cancelled by user",
+    "exportSuccess": "books exported successfully to",
+    "importSuccess": "books imported successfully.",
+    "odsExportNotification": "ODS export will be available in a future version",
+    "invalidPageNumber": "Please enter a valid number of pages.",
+    "pageUpdateLimit": "You can only add {{paginasRestantes}} more pages. The book has {{totalPaginas}} pages and you have already read {{paginasLidas}}.",
+    "pagesReadUpdated": "Pages read updated successfully!",
+    "errorUpdatingPagesRead": "Error updating pages read",
+    "positivePageNumber": "The number of pages read must be a positive number.",
+    "pagesReadTooHigh": "The number of pages read cannot be greater than the total pages of the book."
+  }
+}

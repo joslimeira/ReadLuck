@@ -1,0 +1,67 @@
+{
+  "name": "ReadLuck",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:portable": "electron-builder --win portable",
+    "dist": "electron-builder --publish=never"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Aplicativo desktop ReadLuck",
+
+  "devDependencies": {
+    "electron": "^36.2.0",
+    "electron-builder": "^24.13.3",
+    "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0",
+    "rtf2text": "^1.0.1",
+    "xlsx": "^0.18.5"
+  },
+  "build": {
+    "appId": "com.readluck.app",
+    "productName": "ReadLuck",
+    "directories": {
+      "output": "dist",
+      "buildResources": "src/assets"
+    },
+    "files": [
+      "src/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "dir",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico",
+      "requestedExecutionLevel": "requireAdministrator"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ReadLuck",
+      "deleteAppDataOnUninstall": true,
+      "installerIcon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico",
+      "uninstallerIcon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico",
+      "artifactName": "${productName} Setup ${version}.${ext}"
+    }
+  }
+}

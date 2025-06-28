@@ -1,0 +1,59 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+.env.*
+local.properties
+*.keystore
+*.jks
+/mcp.config.json
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS specific
+.DS_Store
+Thumbs.db         # Windows
+
+# Task files
+tasks.json
+tasks/
+
+# Logs e temporários
+*.tmp
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+
+# Supabase (caso use CLI ou assets locais)
+.supabase/
+
+# Google Drive temporary files
+.tmp.driveupload/
+.tmp.driveupload/93602
+.tmp.driveupload/117322
+
+# Outros
+# Mantendo as entradas existentes para logs do npm/yarn 
+dist-new/
+dist/
+bfg-report/
+.cursor/
+.trae/

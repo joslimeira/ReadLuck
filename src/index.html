@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+  <title>ReadLuck</title>
+  <link rel="icon" href="assets/ReadLuck_Logo_Oficial_2025.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+Marker+Gothic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="i18n.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Barra lateral estilo Notion -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="assets/ReadLuck_Logo_Oficial_2025.png" alt="Logomarca ReadLuck" class="sidebar-logo">
+       
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="sidebar-item" data-page="add-books">
+            <span class="sidebar-icon">➕</span>
+            <span class="sidebar-label">Adicionar Livros</span>
+          </li>
+          <li class="sidebar-item active" data-page="book-list">
+            <span class="sidebar-icon">🔀</span>
+            <span class="sidebar-label">Sorteio de Livros</span>
+          </li>
+          <li class="sidebar-item" data-page="my-books">
+            <span class="sidebar-icon">📚</span>
+            <span class="sidebar-label">Meus Livros</span>
+          </li>
+          <li class="sidebar-item" data-page="favorites">
+            <span class="sidebar-icon">🏆</span>
+            <span class="sidebar-label">Favoritos</span>
+          </li>
+          <li class="sidebar-item" data-page="settings">
+            <span class="sidebar-icon">⚙️</span>
+            <span class="sidebar-label">Configurações</span>
+          </li>
+          <li class="sidebar-item" data-page="about">
+            <span class="sidebar-icon">ℹ️</span>
+            <span class="sidebar-label">Sobre</span>
+          </li>
+          <li class="sidebar-item" data-page="help">
+            <span class="sidebar-icon">❓</span>
+            <span class="sidebar-label">Ajuda</span>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div id="versions" class="version-info"></div>
+      </div>
+    </aside>
+
+    <!-- Conteúdo principal -->
+    <main class="main-content">
+      <!-- Páginas de conteúdo - cada uma é exibida/ocultada conforme navegação -->
+      <div class="content-pages">
+        <!-- Página de Lista de Livros (ativa por padrão) -->
+        <div class="content-page active" id="book-list">
+          <div class="page-header">
+            <h1>Sorteio de Livros</h1>
+          </div>
+          
+          <div class="action-bar">
+            <button class="btn-action" id="btn-sort-book">
+              <span class="icon">🔀</span> Sortear Livro para Ler
+            </button>
+          </div>
+          
+          <!-- Contêiner para a lista de livros na página de Sorteio -->
+          <div id="books-list" class="books-grid">
+            <!-- Cards de livros sorteáveis serão renderizados aqui pelo JavaScript -->
+          </div>
+
+          <!-- Nova seção de divisão vertical para último livro sorteado -->
+          <div class="last-book-section" id="last-book-section">
+            <div class="last-book-container">
+              <div class="last-book-left">
+                <h3 class="section-title">Último Livro Sorteado</h3>
+                <div class="last-book-content">
+                  <div class="last-book-image-container">
+                    <img id="last-book-cover" src="assets/default-cover.png" alt="Capa do livro" class="last-book-image">
+                  </div>
+                  <div class="last-book-details">
+                    <h4 id="last-book-title">Nenhum livro sorteado ainda</h4>
+                    <p id="last-book-author" class="last-book-author">-</p>
+                    <p id="last-book-pages-info" class="last-book-pages-info">
+                      <span id="last-book-pages-read">0</span> <span data-i18n="pages.bookDraw.pagesRead">páginas lidas de</span> 
+                      <span id="last-book-total-pages">0</span>
+                    </p>
+                    <p id="last-book-date" class="last-book-date">Data do último sorteio: -</p>
+                    
+                    <div class="last-book-update">
+                      <label for="pages-read-input" data-i18n="pages.bookDraw.pagesReadAfterDraw">Páginas lidas após o último sorteio:</label>
+                      <div class="pages-read-form">
+                        <input type="number" id="pages-read-input" min="1" data-i18n="[placeholder]pages.bookDraw.pagesPlaceholder">
+                        <button id="update-pages-btn" class="btn btn-primary">Atualizar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="last-book-right">
+                <h3 class="section-title">Estatísticas de Leitura</h3>
+                <div class="reading-stats">
+                  <div class="stat-item">
+                    <span class="stat-label" data-i18n="pages.bookDraw.totalBooks">Total de Livros:</span>
+                    <span class="stat-value" id="total-books">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label" data-i18n="pages.bookDraw.booksRead">Livros Lidos:</span>
+                    <span class="stat-value" id="completed-books">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label" data-i18n="pages.bookDraw.booksInProgress">Livros em Progresso:</span>
+                    <span class="stat-value" id="reading-books">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label" data-i18n="pages.bookDraw.totalPagesRead">Páginas Lidas no Total:</span>
+                    <span class="stat-value" id="total-pages-read">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label" data-i18n="pages.bookDraw.mostRecentBook">Livro Mais Recente:</span>
+                    <span class="stat-value" id="most-recent-book">-</span>
+                  </div>
+                </div>
+                <div class="reading-progress-overall">
+                  <h4>Progresso de Leitura Geral</h4>
+                  <div class="progress-bar overall-progress">
+                    <div class="progress-fill" id="overall-progress-fill" style="width: 0%"></div>
+                  </div>
+                  <p class="progress-text">
+                    <span id="overall-percentage">0</span>% <span data-i18n="pages.bookDraw.completed">concluído</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Página de Adicionar Livros -->
+        <div class="content-page" id="add-books">
+          <div class="page-header">
+            <h1>Adicionar Livros</h1>
+          </div>
+          
+          <div class="add-book-form">
+            <form id="add-book-form">
+              <div class="form-group">
+                <label for="book-title">Título</label>
+                <input type="text" id="book-title" required>
+              </div>
+              <div class="form-group">
+                <label for="book-author">Autor</label>
+                <input type="text" id="book-author" required>
+              </div>
+              <div class="form-group">
+                <label for="book-pages">Número de Páginas</label>
+                <input type="number" id="book-pages" min="1" required>
+              </div>
+              <div class="form-group">
+                <label for="book-status">Status</label>
+                <select id="book-status">
+                  <option value="Não Lido">Não Lido</option>
+                  <option value="Lendo">Lendo</option>
+                  <option value="Concluído">Concluído</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Adicionar Livro</button>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Página de Favoritos -->
+        <div class="content-page" id="favorites">
+          <div class="page-header">
+            <h1>Livros Favoritos</h1>
+          </div>
+          <div class="favorites-container" id="favorites-list">
+            <!-- Livros favoritos serão exibidos aqui -->
+            <p class="empty-state">Você ainda não adicionou nenhum favorito.</p>
+          </div>
+        </div>
+        
+        <!-- Página de Meus Livros -->
+        <div class="content-page" id="my-books">
+          <div class="page-header">
+            <h1>Meus Livros</h1>
+          </div>
+          <div class="app-header">
+            <div class="search-container">
+              <input type="text" id="my-books-search" placeholder="Buscar livros...">
+              <button class="btn" id="my-books-search-btn" data-i18n="pages.myBooks.searchButton">Search</button>
+              <span id="books-count" class="books-count">0 livros</span>
+            </div>
+          </div>
+          <!-- Controles de Seleção, Exclusão e ORDENAÇÃO -->
+          <!-- Novo contêiner para agrupar todos os controles de ação -->
+          <div class="my-books-action-bar">
+          <!-- Novo contêiner para o botão Ordenar -->
+          <div class="sort-control-container">
+            <button id="sort-books-btn" class="btn btn-secondary" data-i18n="pages.myBooks.sortButton">⇅ Sort</button>
+            <div id="sort-dropdown" class="sort-dropdown" style="display:none;position:absolute;z-index:10;">
+              <button class="sort-option" data-sort="title-asc" data-i18n="pages.myBooks.sortOptions.title-asc">Título (A-Z)</button>
+<button class="sort-option" data-sort="title-desc" data-i18n="pages.myBooks.sortOptions.title-desc">Título (Z-A)</button>
+<button class="sort-option" data-sort="author-asc" data-i18n="pages.myBooks.sortOptions.author-asc">Autor (A-Z)</button>
+<button class="sort-option" data-sort="date-desc" data-i18n="pages.myBooks.sortOptions.date-desc">Data de inclusão (Mais recentes primeiro)</button>
+            </div>
+          </div>
+          <div class="my-books-controls">
+            <div class="select-all-container">
+              <input type="checkbox" id="select-all-books-checkbox">
+              <label for="select-all-books-checkbox">Selecionar Todos</label>
+            </div>
+            <button id="delete-selected-books-btn" class="btn btn-danger">
+              <span class="icon">&#128465;</span> Excluir Selecionados
+            </button>
+          </div>
+          </div>
+          <!-- Contêiner para a lista de livros -->
+          <div id="my-books-list">
+            <!-- Os cards de livros serão renderizados aqui pelo JavaScript -->
+            <div class="books-grid-my-books">
+              <!-- Cards de livros virão aqui -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Página de Configurações -->
+        <div class="content-page" id="settings">
+          <div class="page-header">
+            <h1>Configurações</h1>
+          </div>
+          <div class="settings-container">
+            <div class="settings-group">
+              <h3 data-i18n="pages.settings.appearance">Aparência</h3>
+              <div class="setting-item">
+                <label for="dark-mode-toggle" data-i18n="pages.settings.darkMode">Modo Escuro</label>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="dark-mode-toggle">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="settings-group">
+              <h3 data-i18n="pages.settings.language">Idioma</h3>
+              <div class="setting-item">
+                <label data-i18n="pages.settings.selectLanguage">Selecionar Idioma</label>
+                <div class="language-selector">
+                  <button class="language-option" data-lang="en">
+                    <span class="flag">🇺🇸</span>
+                    <span class="language-name">English</span>
+                  </button>
+                  <button class="language-option" data-lang="pt">
+                    <span class="flag">🇧🇷</span>
+                    <span class="language-name">Português</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="settings-group">
+              <h3 data-i18n="pages.settings.data">Dados</h3>
+              <div class="setting-buttons">
+                <button class="btn btn-export" id="export-library-btn" data-i18n="pages.settings.exportLibrary">Exportar Biblioteca</button>
+                <div class="btn-group">
+                  <button class="btn btn-import" id="import-library-dropdown-btn" data-i18n="pages.settings.importLibrary">Importar Biblioteca</button>
+                </div>
+                <button class="btn btn-danger" id="btn-reset-data" data-i18n="pages.settings.resetLibrary">Redefinir Biblioteca</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Página Sobre -->
+        <div class="content-page" id="about">
+          <div class="page-header">
+            <h1>Sobre</h1>
+          </div>
+          <div class="about-container">
+            <div class="about-logo"><img src="assets/ReadLuck_Logo_Oficial_2025.png" alt="Logomarca ReadLuck" class="about-logo"></div>
+            <h2>ReadLuck</h2>
+            <p class="app-version" data-i18n="pages.about.version">Versão 1.0.0</p>
+            <p class="app-description" data-i18n="pages.about.description">Um aplicativo para gerenciamento de sua coleção de livros.</p>
+            <p><span data-i18n="pages.about.developedBy">Desenvolvido por</span> <span style="color: rgb(14, 102, 14);"><strong>José Limeira</strong></span> 💚</span></p></br>
+            
+            <p><span data-i18n="pages.about.contact">Qualquer dúvida ou sugestão entre em contato conosco pelo e-mail:</span> <span style="color: blue;">joselimeira@proton.me</span></p><br>
+            
+            <h3 data-i18n="pages.about.legalDocuments">Documentos Legais</h3>
+            <p><a href="#" id="link-politica-privacidade" data-i18n="pages.about.privacyPolicy">Política de Privacidade</a></p>
+            <p><a href="#" id="link-termos-uso" data-i18n="pages.about.termsOfUse">Termos de Uso</a></p>
+            
+          </div>
+        </div>
+        
+        <!-- Página de Ajuda -->
+        <div class="content-page" id="help">
+          <div class="page-header">
+            <h1>Ajuda</h1>
+          </div>
+          <div class="help-container">
+            <div class="help-section" style="text-align: justify;">
+              <h3 data-i18n="pages.help.addBookTitle">Como adicionar um livro</h3>
+              <p data-i18n="pages.help.addBookText">Para adicionar um novo livro à sua biblioteca, clique no botão "Adicionar Livro" e preencha os campos solicitados.</p>
+            </div>
+            <div class="help-section" style="text-align: justify;">
+              <h3 data-i18n="pages.help.favoriteTitle">Como marcar um livro como favorito</h3>
+              <p data-i18n="pages.help.favoriteText">Na visualização de livros, clique no ícone de estrela de qualquer livro para marcá-lo como favorito.</p>
+            </div>
+            <div class="help-section" style="text-align: justify;">
+              <h3 data-i18n="pages.help.statusTitle">Como alterar o status de um livro</h3>
+              <p data-i18n="pages.help.statusText">Você pode alterar o status de um livro (Não Lido, Lendo, Concluído) diretamente do card do livro, usando o menu suspenso.</p>
+            </div>
+        
+            <div class="help-section" style="text-align: justify;">
+              <h2 class="text-danger" data-i18n="pages.help.bugsTitle">Ainda precisa de ajustes (bugs/issues)🐞 </h2>
+             <p data-i18n="pages.help.bug1">1) A <span style="font-weight: bold; text-decoration: underline;">exportação e importação</span> só estão funcionando para o <span class="text-danger" style="font-weight: bold !important;">tipo de arquivo .CSV</span>, se tentar outro tipo pode gerar erros.</p>
+             <p data-i18n="pages.help.bug2">2) A opção de marcar um livro como <span style="font-weight: bold; text-decoration: underline;">Favorito</span> ainda <span class="text-danger" style="font-weight: bold !important;">não está usual</span>.</p>
+             <p data-i18n="pages.help.bug3">3) Se um livro que já foi concluido sua leitura for marcado como "Não Lido" ou "Lendo" </span><span class="text-danger" style="font-weight: bold !important;">manualmente</span> no menu "Meus Livros", ele poderá ser sorteado. Para que isso não aconteça certifique-se que a opção <span style="font-weight: bold; text-decoration: underline;">"Concluído" esteja marcada no card do livro.</span></p>
+             <p data-i18n="pages.help.bug4">4) O "<span style="font-weight: bold; text-decoration: underline;">Modo Escuro</span>" ainda não está com as cores corretas implementadas,</span><span class="text-danger" style="font-weight: bold !important;">espere outra versão</span> para usá-lo. </p>
+             <p data-i18n="pages.help.bug5">5) A barra "<span style="font-weight: bold; text-decoration: underline;">Buscar</span>" no menu "Meus Livros" ainda </span><span class="text-danger" style="font-weight: bold !important;">não está funcionando</span>, vamos corrigir no futuro. </p>
+             <p data-i18n="pages.help.bug6">6) Se algumas vezes as <span style="font-weight: bold; text-decoration: underline;">caixas de digitação</span>, como a Editar Livros, <span class="text-danger" style="font-weight: bold !important;">travarem e você não conseguir clicar</span> para escrever algo, é só <span class="text-danger" style="font-weight: bold !important;">trocar de janela no sistema operacional</span> (ir para outro programa e voltar <span style="font-weight: bold; text-decoration: underline;">para a janela do ReadLuck</span>) pois assim voltará a funcionar normalmente os campos de edição. Estamos trabalhando corrigir isso nas próximas versões.</p>
+             <p data-i18n="pages.help.bug7">7) A tradução para o  <span style="font-weight: bold; text-decoration: underline;">inglês</span> ainda não está completa, você pode encontrar algumas partes que não foram traduzidas.</p>     
+              </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <p>&copy; ReadLuck - Nunca mais esqueça de um livro :)</p>
+      </footer>
+    </main>
+  </div>
+  
+  <!-- Modal para editar livro (ANTIGO "book-modal", AGORA "edit-book-modal") -->
+  <div class="modal" id="edit-book-modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2 id="edit-modal-title">Editar Livro</h2>
+      <form id="edit-book-form">
+        <input type="hidden" id="editBookId">
+        <div class="form-group">
+          <label for="editBookTitle">Título</label>
+          <input type="text" id="editBookTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="editBookAuthor">Autor</label>
+          <input type="text" id="editBookAuthor" required>
+        </div>
+        <div class="form-group">
+          <label for="editBookPages">Número de Páginas</label>
+          <input type="number" id="editBookPages" min="1" required>
+        </div>
+        <div class="form-group">
+          <label for="editBookStatus">Status</label>
+          <select id="editBookStatus">
+            <option value="Não Lido">Não Lido</option>
+            <option value="Lendo">Lendo</option>
+            <option value="Concluído">Concluído</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editPaginasLidasInput">Páginas Lidas:</label>
+          <input type="number" id="editPaginasLidasInput" name="paginasLidas" min="0">
+        </div>
+        <div class="form-group">
+          <label for="editBookCover">URL da Capa (opcional):</label>
+          <input type="url" id="editBookCover" placeholder="https://exemplo.com/capa.jpg">
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para detalhes do livro sorteado -->
+  <div class="modal" id="selected-book-modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="book-details">
+        <div class="book-icon">📚</div>
+        <h2 id="selected-book-title">Título do Livro</h2>
+        <p id="selected-book-author">por Autor do Livro</p>
+        <p id="selected-book-pages">000 páginas</p>
+        <div class="book-actions">
+          <button class="btn" id="btn-start-reading">Começar a Ler</button>
+          <button class="btn" id="btn-mark-read">Marcar como Lido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal para seleção de formato de exportação -->
+  <div class="modal" id="export-format-modal">
+    <div class="modal-content">
+      <span class="close-modal" data-modal-id="export-format-modal">&times;</span>
+      <h2 data-i18n="modals.exportFormat.title">Selecionar Formato para Exportação</h2>
+      <div class="export-format-options">
+        <p data-i18n="modals.exportFormat.description">Escolha o formato para exportar sua biblioteca:</p>
+        <div class="format-selection-group">
+          <button class="btn format-btn" data-format="csv">CSV</button>
+          <button class="btn format-btn" data-format="txt">TXT</button>
+          <button class="btn format-btn" data-format="ods">ODS</button>
+          <button class="btn format-btn" data-format="xlsx">XLSX</button>
+          <button class="btn format-btn" data-format="html">HTML</button>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary close-modal-btn" data-modal-id="export-format-modal">Cancelar</button>
+        <!-- O botão de exportar principal foi removido daqui, a ação ocorrerá ao clicar no botão de formato -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal para seleção de formato de IMPORTAÇÃO -->
+  <div class="modal" id="import-format-modal">
+    <div class="modal-content">
+      <span class="close-modal" data-modal-id="import-format-modal">&times;</span>
+      <h2 data-i18n="modals.importFormat.title">Selecionar Formato para Importação</h2>
+      <div class="import-format-options"> <!-- Pode reusar a classe 'export-format-options' ou criar uma nova se precisar de estilos diferentes -->
+        <p data-i18n="modals.importFormat.description">Escolha o formato para importar sua biblioteca:</p>
+        <div class="format-selection-group">
+          <button class="btn format-btn" data-format="json">JSON</button>
+          <button class="btn format-btn" data-format="txt">TXT</button>
+          <button class="btn format-btn" data-format="csv">CSV</button>
+          <button class="btn format-btn" data-format="xlsx">XLSX</button>
+          <!-- Adicionar outros formatos se necessário -->
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary close-modal-btn" data-modal-id="import-format-modal" data-i18n="modals.importFormat.cancelButton">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Input invisível para abrir arquivos -->
+  <input type="file" id="file-input" style="display: none">
+  
+  <script src="renderer.js"></script>
+</body>
+</html>

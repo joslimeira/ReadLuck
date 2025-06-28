@@ -1,0 +1,1677 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'LXGW Marker Gothic', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+body {
+  background-color: #f8f5fe;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Layout principal com barra lateral */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Estilos para a barra lateral estilo Notion */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #f7f6f3;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 20px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.sidebar-logo {
+  max-width: 230px; /* Ajuste este valor conforme necessário */
+  height: auto;
+}
+
+.sidebar-logo img {
+  max-width: 300px; /* Ajuste este valor conforme necessário */
+  height: auto;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 10px 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 2px 8px;
+  transition: background-color 0.2s ease;
+  font-size: 18px;
+}
+
+.sidebar-item:hover {
+  background-color: #eae9e7;
+}
+
+/* Adicione a regra abaixo ou dentro do bloco .sidebar-item se preferir */
+.sidebar-icon {
+  margin-right: 10px; /* Ajuste o valor '10px' conforme a sua preferência de espaçamento */
+}
+
+/* Área de conteúdo principal */
+.main-content {
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Estilos para páginas de conteúdo */
+.content-pages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px;
+}
+
+.content-page {
+  display: none;
+  padding: 20px 0;
+}
+
+.content-page.active {
+  display: block;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.dark-mode .page-header h1 {
+  color: #e0e0e0; /* Garantindo cor clara para títulos de página no modo escuro */
+}
+
+/* Estilos para o menu */
+.menu-bar {
+  background-color: #f2f2f2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 900;
+}
+
+.menu-bar ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-dropdown {
+  position: relative;
+}
+
+.menu-item {
+  display: block;
+  padding: 12px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.menu-item:hover {
+  background-color: #e0e0e0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 999;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.dropdown-content a:hover {
+  background-color: #e0e0e0;
+}
+
+.dropdown-content hr {
+  margin: 5px 0;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+}
+
+.menu-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Estilos para a página About */
+.about-container {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.about-logo {
+  font-size: 64px;
+  margin-bottom: 20px;
+  display: block; /* Garantir que se comporta como bloco para margens auto */
+  margin-left: auto; /* Ajuste para centralizar */
+  margin-right: auto; /* Empurra para a esquerda */
+}
+
+.about-logo img {
+  max-width: 500px; /* Ajuste este valor conforme necessário */
+  height: auto;
+}
+
+.about-container h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.app-version {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.app-description {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+/* Estilos para página de configurações */
+.settings-container {
+  max-width: 600px;
+}
+
+.settings-group {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.settings-group h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.setting-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-export {
+  background-color: orange !important; /* Laranja para exportar */
+  color: white !important;
+}
+
+.btn-import {
+  background-color: dodgerblue !important; /* Azul para importar */
+  color: white !important;
+}
+
+/* Estilos para o toggle switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: #9146FF;
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+/* Estilos para página de ajuda */
+.help-container {
+  max-width: 700px;
+}
+
+.help-section {
+  margin-bottom: 30px;
+}
+
+.help-section h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.help-section p {
+  line-height: 1.6;
+}
+
+/* Estilos para formulário de adicionar livro */
+.add-book-form {
+  max-width: 500px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos para página de favoritos */
+.favorites-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: #777;
+  font-style: italic;
+}
+
+/* App Header com barra de busca e botão de adicionar */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.search-container input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px 0 0 4px;
+  font-size: 1rem;
+}
+
+.search-container .btn {
+  border-radius: 0 4px 4px 0;
+  padding: 0.8rem 1.5rem;
+}
+
+.books-count {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-left: 10px;
+  color: #333;
+}
+
+.dark-mode .books-count {
+  color: #e0e0e0; /* Cor clara para o número de livros no modo escuro */
+}
+
+/* Barra de ações */
+.action-bar {
+  margin-bottom: 2rem;
+}
+
+.btn-action {
+  background: linear-gradient(90deg, #88f8cd 0%, #141691 100%);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-size: 2.0rem;
+  width: 100%;
+}
+
+.btn-action:hover {
+  opacity: 0.9;
+}
+
+.icon {
+  margin-right: 0.5rem;
+}
+
+/* Estilos para a seção de último livro sorteado */
+.last-book-section {
+  margin-bottom: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.last-book-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.last-book-left {
+  flex: 1;
+  padding-right: 1rem;
+  border-right: 1px solid #eee;
+}
+
+.last-book-right {
+  flex: 1;
+  padding-left: 1rem;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
+  color: #333;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.section-title:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #88f8cd 0%, #141691 100%);
+}
+
+.dark-mode .section-title {
+  color: #e0e0e0; /* Cor clara para títulos de seção no modo escuro */
+}
+
+.last-book-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.last-book-image-container {
+  width: 120px;
+  height: 180px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  background-color: #eee;
+  flex-shrink: 0;
+}
+
+.last-book-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.last-book-details {
+  flex: 1;
+}
+
+.last-book-details h4 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.dark-mode .last-book-details h4 {
+  color: #e0e0e0; /* Cor clara para o título do último livro sorteado no modo escuro */
+}
+
+.last-book-author {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 0.7rem;
+}
+
+.last-book-pages-info, .last-book-date {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 0.7rem;
+}
+
+.last-book-update {
+  margin-top: 1.5rem;
+}
+
+.last-book-update label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.dark-mode .last-book-update label {
+  color: #aaa; /* Cor clara para o rótulo no modo escuro */
+}
+
+.pages-read-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pages-read-form input {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.dark-mode .pages-read-form input {
+  background-color: #333; /* Fundo escuro para o input */
+  border-color: #444; /* Borda mais escura */
+  color: #e0e0e0; /* Cor clara para o texto do input */
+}
+
+/* Grid de livros (GENÉRICO - usado na página principal de sorteio) */
+.books-container {
+  margin-bottom: 2rem;
+}
+
+.book-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.book-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.book-author {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.7rem;
+}
+
+.book-pages {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.book-last-selected {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 1rem;
+}
+
+.status-dropdown {
+  /* REMOVIDO: position: absolute; */
+  /* REMOVIDO: top: 1rem; */
+  /* REMOVIDO: right: 1rem; */
+}
+
+.status-dropdown select {
+  padding: 0.4rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 0.9rem;
+}
+
+/* Estilos para progresso de leitura */
+.reading-progress {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #88f8cd 0%, #141691 100%);
+  border-radius: 4px;
+}
+
+.pages-read-info {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: right;
+}
+
+/* Estilos para ações do card de livro */
+.book-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.btn-edit, .btn-delete {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background-color: #141691;
+  color: white;
+}
+
+.btn-delete {
+  background-color: #e25555;
+  color: white;
+}
+
+.favorite {
+  margin-left: auto;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.favorite.active {
+  color: #ffce00;
+}
+
+.favorite:hover {
+  transform: scale(1.2);
+}
+
+/* Botões */
+.btn {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.btn:hover {
+  background-color: #444;
+}
+
+.btn-primary {
+  background-color: #141691;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #7d35e8;
+}
+
+.btn-danger {
+  background-color: #ff4d4f;
+}
+
+.btn-danger:hover {
+  background-color: #ff2629;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow: auto;
+}
+
+.modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  z-index: 1001;
+  margin: auto; /* Adiciona margem automática para garantir centralização */
+  transform: translateZ(0); /* Força aceleração de hardware para melhor renderização */
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Estilos para o novo modal de seleção de formato de exportação */
+#export-format-modal .modal-content {
+  max-width: 450px; /* Um pouco mais largo para os botões */
+}
+
+/* Melhorar posicionamento dos modais de formato */
+#export-format-modal .modal-content,
+#import-format-modal .modal-content {
+  max-width: 450px;
+  margin: 10vh auto; /* Centralizar verticalmente com margem do topo */
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Garantir que o modal ocupe toda a tela mas permaneça oculto por padrão */
+#export-format-modal,
+#import-format-modal {
+  display: none; /* CORRIGIDO: Oculto por padrão */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Quando ativo, mostrar como flex */
+#export-format-modal.active,
+#import-format-modal.active {
+  display: flex;
+}
+
+.export-format-options p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+.dark-mode .export-format-options p {
+  color: #bbb;
+}
+
+.format-selection-group {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os botões quebrem a linha se necessário */
+  gap: 10px; /* Espaço entre os botões */
+  justify-content: center; /* Centraliza os botões */
+  margin-bottom: 1.5rem;
+}
+
+.format-selection-group .btn.format-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  flex-grow: 1; /* Faz os botões tentarem ocupar espaço igual */
+  min-width: 80px; /* Largura mínima para cada botão */
+  text-align: center;
+}
+
+.dark-mode .format-selection-group .btn.format-btn {
+  background-color: #333;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+.format-selection-group .btn.format-btn:hover {
+  background-color: #e0e0e0;
+  border-color: #bbb;
+}
+
+.dark-mode .format-selection-group .btn.format-btn:hover {
+  background-color: #444;
+  border-color: #666;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end; /* Alinha o botão de cancelar à direita */
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.btn-secondary {
+  background-color: #141691;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+/* Form styling */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.dark-mode .form-group label {
+  color: #e0e0e0; /* Garantindo cor clara para rótulos no modo escuro */
+}
+
+.form-group input, 
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: white;
+  position: relative;
+  z-index: 1002;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.dark-mode .form-group input,
+.dark-mode .form-group select {
+  background-color: #333; /* Fundo escuro para input e select */
+  border-color: #444; /* Borda mais escura */
+  color: #e0e0e0; /* Garantindo cor clara para texto de input e select */
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: 2px solid #9146FF;
+  border-color: #9146FF;
+}
+
+/* Book details in modal */
+.book-details {
+  text-align: center;
+}
+
+.book-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.book-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+#selected-book-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+#selected-book-author {
+  font-size: 1.0rem;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+#selected-book-pages {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f2f2f2;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.dark-mode footer {
+  background-color: #1e1e1e; /* Fundo preto para o rodapé no modo escuro */
+  color: #aaa; /* Cor clara para o texto do rodapé no modo escuro */
+}
+
+#versions {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+/* Modo escuro */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.dark-mode .sidebar {
+  background-color: #252525;
+  border-right-color: #333;
+}
+
+.dark-mode .sidebar-item:hover {
+  background-color: #2a2a2a;
+}
+
+.dark-mode .sidebar-header,
+.dark-mode .sidebar-footer {
+  border-color: #333;
+}
+
+.dark-mode .menu-bar,
+.dark-mode .app-header {
+  background-color: #252525;
+}
+
+.dark-mode .menu-item:hover {
+  background-color: #333;
+}
+
+.dark-mode .dropdown-content {
+  background-color: #252525;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .dropdown-content a:hover {
+  background-color: #333;
+}
+
+.dark-mode .book-card,
+.dark-mode .add-book-form,
+.dark-mode .modal-content,
+.dark-mode .last-book-section {
+  background-color: #252525;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .book-title {
+  color: #e0e0e0;
+}
+
+.dark-mode .book-author,
+.dark-mode .book-pages,
+.dark-mode .book-last-selected,
+.dark-mode .pages-read-info,
+.dark-mode .last-book-author,
+.dark-mode .last-book-pages-info,
+.dark-mode .last-book-date {
+  color: #aaa;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+  background-color: #333;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.dark-mode .section-title {
+  color: #e0e0e0;
+}
+
+.dark-mode .stat-label {
+  color: #aaa;
+}
+
+.dark-mode .stat-value {
+  color: #e0e0e0;
+}
+
+.dark-mode .status-dropdown select {
+  background-color: #333;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.dark-mode .progress-bar {
+  background-color: #333;
+}
+
+.dark-mode .last-book-left {
+  border-right-color: #333;
+}
+
+@media screen and (max-width: 768px) {
+  .dark-mode .last-book-left {
+    border-bottom-color: #333;
+  }
+}
+
+/* Responsividade */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 60px;
+  }
+  
+  .sidebar-label {
+    display: none;
+  }
+  
+  .sidebar-header h3 {
+    display: none;
+  }
+  
+  .app-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .search-container {
+    width: 100%;
+  }
+  
+  .books-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .last-book-container {
+    flex-direction: column;
+  }
+  
+  .last-book-left {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .last-book-right {
+    padding-left: 0;
+  }
+}
+
+/* Para telas muito pequenas */
+@media screen and (max-width: 480px) {
+  .modal-content {
+    width: 95%;
+    padding: 1.5rem;
+  }
+  
+  .book-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .last-book-content {
+    flex-direction: column;
+  }
+  
+  .last-book-image-container {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 1rem;
+  }
+  
+  .pages-read-form {
+    flex-direction: column;
+  }
+}
+
+/* Estatísticas de leitura */
+.reading-stats {
+  margin-bottom: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.stat-label {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.reading-progress-overall {
+  background-color: #f6f6f6;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.reading-progress-overall h4 {
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  color: #444;
+}
+
+.overall-progress {
+  height: 10px;
+  margin-bottom: 0.8rem;
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  text-align: center;
+  color: #555;
+}
+
+/* Ajustes para o modo escuro */
+.dark-mode .stat-item {
+  border-bottom-color: #333;
+}
+
+.dark-mode .reading-progress-overall {
+  background-color: #252525;
+}
+
+.dark-mode .reading-progress-overall h4 {
+  color: #ccc;
+}
+
+.dark-mode .progress-text {
+  color: #aaa;
+}
+
+/* Estilos para seleção múltipla de livros */
+.books-action-bar {
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.books-action-bar .btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.books-action-bar .btn-success {
+  background-color: #28a745;
+}
+
+.books-action-bar .btn-success:hover {
+  background-color: #218838;
+}
+
+.book-selection {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.book-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.book-card {
+  position: relative;
+  padding-left: 3rem;
+}
+
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.search-suggestion {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-suggestion:hover {
+  background-color: #f5f5f5;
+}
+
+/* Estilos para a página Meus Livros - Cards */
+.my-books-header-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: var(--background-color-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.select-all-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  border-radius: var(--border-radius);
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: auto;
+}
+
+.select-all-container:hover {
+  background-color: #218838;
+}
+
+.select-all-container label {
+  cursor: pointer;
+}
+
+#select-all-books-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+#delete-selected-books-btn {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.books-grid-my-books {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0rem 1rem 1rem 1rem;
+}
+
+.book-card-my-books {
+  background-color: var(--background-color-tertiary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.book-card-my-books:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.book-card-my-books-checkbox-area {
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(0,0,0,0.03);
+  display: flex;
+  align-items: center;
+}
+
+.book-card-my-books .book-select {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.book-card-my-books-cover {
+  height: 120px;
+  background-color: var(--accent-color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+}
+
+.book-card-my-books-cover .icon-book-cover {
+  font-size: 3rem;
+  opacity: 0.7;
+}
+
+.book-card-my-books-info {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.book-card-my-books-info h3,
+.book-card-my-books-info p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color-primary);
+}
+
+.book-card-my-books-info .icon-pin,
+.book-card-my-books-info .icon-user,
+.book-card-my-books-info .icon-pages,
+.book-card-my-books-info .icon-status,
+.book-card-my-books-info .icon-calendar {
+  font-size: 1.1em;
+  color: var(--accent-color);
+}
+
+.book-card-my-books-info h3.book-title-my-books {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-color-headings);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.book-card-my-books-info .book-author-my-books,
+.book-card-my-books-info .book-pages-my-books,
+.book-card-my-books-info .book-read-pages,
+.book-card-my-books-info .book-last-selected-my-books {
+  font-size: 1.3rem;
+  color: var(--text-color-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.book-card-my-books-info .book-status-my-books label {
+  font-size: 1.3rem;
+  color: var(--text-color-primary);
+}
+
+.book-card-my-books-actions {
+  padding: 0.75rem 1rem;
+  background-color: rgba(0, 0, 0, 0.03);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  border-top: 1px solid var(--border-color-light);
+}
+
+.book-card-my-books-actions .btn-icon {
+  background-color: transparent;
+  border: none;
+  color: var(--text-color-secondary);
+  padding: 0.5rem;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.book-card-my-books-actions .btn-icon:hover {
+  background-color: var(--accent-color-hover);
+  color: white;
+}
+
+.book-card-my-books-actions .btn-icon .icon-edit,
+.book-card-my-books-actions .btn-icon .icon-delete {
+  font-size: 1em;
+}
+
+/* Ajustes para responsividade se necessário */
+@media (max-width: 600px) {
+  .books-grid-my-books {
+    grid-template-columns: 1fr; /* Uma coluna em telas pequenas */
+  }
+
+  .my-books-header-controls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+/* Estilos para o Dark Mode (Continuação) */
+.dark-mode .modal-content {
+  background-color: var(--dm-background-color-secondary);
+  color: var(--dm-text-color-primary);
+  border: 1px solid var(--dm-border-color);
+}
+
+.dark-mode .close-modal {
+  color: var(--dm-text-color-secondary);
+}
+
+.dark-mode .close-modal:hover {
+  color: var(--dm-accent-color);
+}
+
+/* Estilos para a Notificação Toast */
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px); /* Começa fora da tela em baixo */
+  background-color: #25ca8b; /* Verde */
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px; /* Bordas mais arredondadas */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none; /* Para não interferir com cliques abaixo */
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0); /* Move para a posição final */
+}
+
+/* Dropdown de ordenação */
+.sort-dropdown {
+  background-color: var(--background-color-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  min-width: 180px;
+  /* overflow: hidden; */ /* REMOVIDO */
+  position: absolute; /* Já está correto */
+  z-index: 1010; /* Já está correto */
+  top: 100%; /* Posiciona a borda superior do dropdown na altura da borda inferior do pai */
+  left: 0;  /* Alinha a borda esquerda do dropdown com a borda esquerda do pai */
+  /* Se quiser alinhar à direita, comente o 'left' e use 'right: 0;' */
+  /* right: 0; */
+  /* ---------------------------------------------- */
+}
+
+.sort-option {
+  display: block;
+  width: 100%; /* Ocupar largura total do contêiner */
+  padding: 10px 15px; /* Espaçamento interno */
+  text-align: left; /* Alinhar texto à esquerda */
+  background-color: transparent; /* Fundo transparente por padrão */
+  border: none; /* Remover borda padrão do botão */
+  cursor: pointer;
+  color: var(--text-color-primary); /* Cor do texto */
+  transition: background-color 0.2s ease, color 0.2s ease; /* Transição suave */
+  font-size: 14px; /* Tamanho da fonte */
+}
+
+.sort-option:hover {
+  background-color: var(--hover-background-color); /* Cor de fundo ao passar o mouse */
+  color: var(--hover-text-color); /* Cor do texto ao passar o mouse */
+}
+
+/* Adicionar variáveis CSS para modo claro/escuro (se já não existirem) */
+:root {
+  --background-color-secondary: #ffffff;
+  --border-color: #e0e0e0;
+  --text-color-primary: #333333;
+  --hover-background-color: #f0f0f0; /* Um cinza claro para hover */
+  --hover-text-color: #000000; /* Cor do texto no hover */
+}
+
+.text-danger {
+  color: red;
+}
+
+.dark-mode {
+  --background-color-secondary: #333333; /* Fundo mais escuro no modo escuro */
+  --border-color: #555555; /* Borda mais escura */
+  --text-color-primary: #e0e0e0; /* Texto claro */
+  --hover-background-color: #444444; /* Fundo hover mais escuro */
+  --hover-text-color: #ffffff; /* Texto hover claro */
+}
+
+/* Garantir que estilos gerais de botões não interfiram */
+
+/* Regra para o novo contêiner flexível */
+.my-books-action-bar {
+  display: flex; /* Coloca os itens lado a lado */
+  align-items: center; /* Centraliza os itens verticalmente */
+  gap: 10px; /* Espaçamento entre os itens */
+  margin-bottom: 1rem; /* Espaço abaixo da barra de ações */
+  padding: 0 1rem; /* Padding nas laterais */
+}
+
+/* Ajustar a regra existente para o contêiner dos botões de seleção/exclusão */
+.my-books-controls {
+  display: flex; /* Mantém display flex para alinhar Selecionar Todos e Excluir */
+  flex-direction: row; /* Alinha os itens em linha (já é o padrão, mas explicitando) */
+  align-items: center; /* Alinha os itens verticalmente */
+  gap: 10px; /* Espaço entre Selecionar Todos e Excluir */
+  /* Remover estilos que causavam o fundo verde a se esticar, se existiam */
+  background-color: transparent; /* Garante que o fundo não esteja aqui */
+  padding: 0; /* Remove padding indesejado se existia */
+  width: auto; /* Ajusta a largura ao conteúdo, importante para flex item */
+  flex-shrink: 0; /* Impede que este contêiner encolha no flexbox pai */
+}
+
+/* Ajustar o contêiner do botão Ordenar para que não se estique */
+.sort-control-container {
+    position: relative;
+    width: auto; /* Ajusta a largura ao conteúdo */
+    flex-shrink: 0; /* Impede que encolha */
+}
+
+/* Ajustar o estilo do select-all-container para que o fundo verde não se estique */
+.select-all-container {
+  display: inline-flex; /* Use inline-flex para que o contêiner se ajuste ao conteúdo e fique inline com outros flex items */
+  align-items: center; /* Para alinhar o checkbox e o texto dentro dele */
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  border-radius: var(--border-radius);
+  background-color: #25ca8b; /* Cor verde */
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: auto; /* Permite que a largura se ajuste ao conteúdo */
+  flex-shrink: 0; /* Impede que o item encolha */
+}
+
+.select-all-container:hover {
+  background-color: #218838;
+}
+
+.select-all-container label {
+  cursor: pointer;
+}
+
+#select-all-books-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+#delete-selected-books-btn {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  width: auto; /* Ajusta a largura ao conteúdo */
+  flex-shrink: 0; /* Impede que encolha */
+}
+
+#sort-books-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    width: auto; /* Ajusta a largura ao conteúdo */
+    flex-shrink: 0; /* Impede que encolha */
+}
+
+/* Estilos para o seletor de idioma */
+.language-selector {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.language-option:hover {
+  border-color: #9146FF;
+  background-color: #f8f5fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(145, 70, 255, 0.2);
+}
+
+.language-option.active {
+  border-color: #9146FF;
+  background-color: #9146FF;
+  color: white;
+}
+
+.language-option .flag {
+  font-size: 18px;
+}
+
+.language-option .language-name {
+  font-weight: 600;
+}
+
+/* Estilos para modo escuro */
+.dark-mode .language-option {
+  background-color: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.dark-mode .language-option:hover {
+  background-color: #444;
+  border-color: #9146FF;
+}
+
+.dark-mode .language-option.active {
+  background-color: #9146FF;
+  color: white;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 600px) {
+  .language-selector {
+    flex-direction: column;
+  }
+  
+  .language-option {
+    min-width: 100%;
+  }
+}
