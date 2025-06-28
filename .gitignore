@@ -45,11 +45,6 @@ tasks/
 # Supabase (caso use CLI ou assets locais)
 .supabase/
 
-# Google Drive temporary files
-.tmp.driveupload/
-.tmp.driveupload/93602
-.tmp.driveupload/117322
-
 # Outros
 # Mantendo as entradas existentes para logs do npm/yarn 
 dist-new/

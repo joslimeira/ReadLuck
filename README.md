@@ -1,7 +1,5 @@
 # 📚 ReadLuck
-
-A fully offline app to manage and randomly pick books in a fun, practical, and free way.  
-
+ 
 
 ![ReadLuck Screenshot](./assets/screenshots/READLUCK_PAGE1.png)
 
@@ -13,7 +11,7 @@ A fully offline app to manage and randomly pick books in a fun, practical, and f
 📚 Add books with customizable fields  
 🎲 Smart book draw with visual highlights  
 📊 Quick reading statistics  
-🗂️ “My Books” screen with search, batch edit, and delete  
+🗂️ "My Books" screen with search, batch edit, and delete  
 💾 Library backup and restore in format: `CSV`  
 🔐 Completely offline — no data collection, no account, no tracking
 
@@ -24,6 +22,7 @@ A fully offline app to manage and randomly pick books in a fun, practical, and f
 - **Electron** · modern desktop via HTML/CSS/JS
 - **Electron Store** · local data persistence
 - **LXGW Marker Gothic** · custom primary font
+- **Electron Builder** · application packaging and distribution
 
 ---
 
@@ -46,6 +45,16 @@ This project is licensed under the GNU Affero General Public License v3.0.
 > This means that any modifications or network use also require that the source code be made available.
 
 📄 Read the Terms of Use for more details.
+
+---
+
+## 🔧 Troubleshooting
+
+### Instalação
+
+- **Erro "Não é possível fechar o ReadLuck"**: Se você encontrar este erro durante a instalação, feche a janela do ReadLuck e clique em "Repetir" no instalador para continuar.
+- **Permissões de Administrador**: A instalação pode requerer privilégios de administrador para instalar corretamente no diretório Program Files.
+- **Versão Portátil**: Se continuar tendo problemas com a instalação, considere usar a versão portátil que não requer instalação.
 
 ---
 

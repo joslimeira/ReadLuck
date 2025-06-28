@@ -13,8 +13,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "Aplicativo desktop ReadLuck",
-
+  "description": "ReadLuck - Gerenciador de Biblioteca Pessoal",
   "devDependencies": {
     "electron": "^36.2.0",
     "electron-builder": "^24.13.3",
@@ -41,15 +40,14 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": ["x64", "ia32"]
         },
         {
-          "target": "dir",
-          "arch": ["x64"]
+          "target": "portable",
+          "arch": ["x64", "ia32"]
         }
       ],
-      "icon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico",
-      "requestedExecutionLevel": "requireAdministrator"
+      "icon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -60,8 +58,26 @@
       "shortcutName": "ReadLuck",
       "deleteAppDataOnUninstall": true,
       "installerIcon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico",
+
       "uninstallerIcon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico",
-      "artifactName": "${productName} Setup ${version}.${ext}"
+      "artifactName": "ReadLuck Setup ${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "ReadLuck Portable ${version}.${ext}"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64", "ia32"]
+        }
+      ],
+      "icon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico",
+      "category": "Office"
     }
   }
 }

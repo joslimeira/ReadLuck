@@ -20,28 +20,113 @@ const XLSX = require('xlsx');
 const rtfToText = require('rtf2text').string;
 const logger = require('./utils/logger');
 
-logger.info('MAIN', 'Script iniciado');
-
-// Inicializar electron-store
-// Certifique-se de ter o electron-store instalado: npm install electron-store
-// Detectar se é versão portátil baseado no diretório de execução
+// Detectar modo portátil de forma mais eficiente
 const isPortable = process.env.PORTABLE_EXECUTABLE_DIR !== undefined || 
-                  !process.execPath.includes('Program Files') && 
-                  !process.execPath.includes('AppData');
+                  path.basename(process.execPath).toLowerCase().includes('portable');
 
-// Configurar store com diretórios separados para cada versão
-const storeConfig = {
-  name: isPortable ? 'readluck-portable' : 'readluck-installed'
-};
+logger.info('MAIN', `Modo de execução: ${isPortable ? 'Portátil' : 'Instalado'}`);
+logger.info('MAIN', `Diretório de execução: ${process.execPath}`);
 
-// Para versão portátil, usar diretório local ao executável
-if (isPortable) {
-  storeConfig.cwd = path.dirname(process.execPath);
+// Inicializar store de forma lazy (apenas quando necessário)
+let store;
+function getStore() {
+  if (!store) {
+    try {
+      if (isPortable) {
+        // Caminho para dados portáteis ao lado do executável
+        const execDir = path.dirname(process.execPath);
+        const portableDataPath = path.join(execDir, 'portable_data');
+        
+        logger.info('MAIN', `Diretório de dados portáteis: ${portableDataPath}`);
+        
+        // Verificar se o diretório existe e criar se necessário
+        if (!fs.existsSync(portableDataPath)) {
+          logger.info('MAIN', `Criando diretório de dados portáteis: ${portableDataPath}`);
+          try {
+            fs.mkdirSync(portableDataPath, { recursive: true });
+            logger.info('MAIN', `Diretório de dados portáteis criado com sucesso`);
+          } catch (dirError) {
+            logger.error('MAIN', `Erro ao criar diretório de dados portáteis: ${dirError.message}`);
+            // Tentar criar no diretório temporário como fallback
+            const tempDir = path.join(require('os').tmpdir(), 'readluck-portable');
+            logger.info('MAIN', `Tentando usar diretório temporário como fallback: ${tempDir}`);
+            fs.mkdirSync(tempDir, { recursive: true });
+            store = new Store({
+              name: 'readluck-data',
+              cwd: tempDir
+            });
+            logger.info('MAIN', `Store inicializado em diretório temporário: ${tempDir}`);
+            return store;
+          }
+        }
+        
+        // Testar permissões de escrita
+        const testFile = path.join(portableDataPath, '.write-test');
+        try {
+          fs.writeFileSync(testFile, 'test');
+          fs.unlinkSync(testFile); // Remover arquivo de teste
+          logger.info('MAIN', `Teste de escrita bem-sucedido em: ${portableDataPath}`);
+        } catch (writeError) {
+          logger.error('MAIN', `Erro no teste de escrita: ${writeError.message}`);
+          // Usar diretório temporário como fallback
+          const tempDir = path.join(require('os').tmpdir(), 'readluck-portable');
+          logger.info('MAIN', `Usando diretório temporário como fallback: ${tempDir}`);
+          fs.mkdirSync(tempDir, { recursive: true });
+          store = new Store({
+            name: 'readluck-data',
+            cwd: tempDir
+          });
+          logger.info('MAIN', `Store inicializado em diretório temporário: ${tempDir}`);
+          return store;
+        }
+        
+        // Criar store no diretório portátil
+        store = new Store({
+          name: 'readluck-data',
+          cwd: portableDataPath
+        });
+        logger.info('MAIN', `Store inicializado em modo portátil: ${portableDataPath}`);
+      } else {
+        // Modo instalado - usar localização padrão
+        store = new Store({
+          name: 'readluck-installed'
+        });
+        logger.info('MAIN', `Store inicializado em modo instalado`);
+      }
+      
+      // Verificar se o store está funcionando
+      const testData = { test: 'test-data' };
+      store.set('test-write', testData);
+      const readTest = store.get('test-write');
+      if (JSON.stringify(readTest) !== JSON.stringify(testData)) {
+        throw new Error('Falha na verificação de leitura/escrita do store');
+      }
+      store.delete('test-write');
+      logger.info('MAIN', `Teste de leitura/escrita do store bem-sucedido`);
+      
+    } catch (error) {
+      logger.error('MAIN', `Erro ao inicializar store: ${error.message}`);
+      // Fallback para armazenamento em memória em caso de erro
+      store = new Store({
+        name: 'readluck-memory',
+        cwd: require('os').tmpdir()
+      });
+      logger.warn('MAIN', `Usando armazenamento temporário em memória devido a erro`);
+      
+      // Mostrar mensagem ao usuário
+      if (mainWindow) {
+        dialog.showMessageBox(mainWindow, {
+          type: 'warning',
+          title: 'Aviso de Armazenamento',
+          message: 'Não foi possível acessar o armazenamento permanente. Seus dados serão salvos temporariamente nesta sessão.',
+          detail: `Erro: ${error.message}\n\nTente executar o aplicativo em uma pasta com permissões de escrita ou sem privilégios de administrador.`,
+          buttons: ['OK']
+        });
+      }
+    }
+  }
+  return store;
 }
-
-const store = new Store(storeConfig);
-logger.info('MAIN', `Electron Store inicializado - Modo: ${isPortable ? 'Portátil' : 'Instalado'}`);
-logger.info('MAIN', `Diretório de dados: ${store.path}`);
 
 // Lista de extensões de arquivo permitidas
 const ALLOWED_FILE_EXTENSIONS = ['.txt', '.csv', '.json', '.xlsx', '.ods', '.html'];
@@ -67,7 +152,7 @@ function validateFileExtension(filePath) {
 // Função para gerar novo ID de livro (simples incremento)
 // Considere uma estratégia mais robusta para IDs únicos se necessário (ex: UUID)
 function getNextBookId() {
-  const books = store.get('books', []);
+  const books = getStore().get('books', []);
   if (books.length === 0) {
     return 1;
   }
@@ -80,82 +165,70 @@ let mainWindow;
 
 function createWindow() {
   try {
-    logger.info('MAIN', 'Iniciando criação da janela principal');
-    
     const iconPath = path.join(__dirname, 'assets/ReadLuck-Icone-Oficial-2025-Final.ico');
-    logger.debug('MAIN', `Caminho do ícone: ${iconPath}`);
     
-    if (!fs.existsSync(iconPath)) {
-      logger.warn('MAIN', 'Arquivo de ícone não encontrado, usando ícone padrão');
-    }
+    // Verificação assíncrona do ícone para não bloquear a inicialização
+    const iconExists = fs.existsSync(iconPath);
     
-    // Criar janela do navegador
+    // Criar janela do navegador com configurações otimizadas
     mainWindow = new BrowserWindow({
       width: 800,
       height: 600,
       autoHideMenuBar: true,
       title: 'ReadLuck',
-      icon: iconPath,
+      icon: iconExists ? iconPath : undefined,
       show: false, // Não mostrar a janela até que esteja pronta
-      skipTaskbar: false, // Permitir que a janela apareça na barra de tarefas
-      alwaysOnTop: false, // Não manter sempre no topo
+      skipTaskbar: false,
+      alwaysOnTop: false,
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
         preload: path.join(__dirname, 'preload.js'),
-        sandbox: false
+        sandbox: false,
+        backgroundThrottling: false, // Evita throttling em background
+        enableRemoteModule: false
       }
     });
     
     // Mostrar a janela quando estiver pronta
     mainWindow.once('ready-to-show', () => {
       mainWindow.show();
-      logger.info('MAIN', 'Janela principal mostrada');
     });
-    logger.debug('MAIN_WINDOW', 'Objeto BrowserWindow criado');
 
 
-    // Carregar o arquivo index.html do aplicativo
-    try {
-      const indexPath = path.join(__dirname, 'index.html');
-      logger.debug('MAIN_WINDOW', `Tentando carregar ${indexPath}`);
-      
-      if (!fs.existsSync(indexPath)) {
-        logger.error('MAIN_WINDOW', `Arquivo index.html não encontrado em: ${indexPath}`);
-        dialog.showErrorBox('Erro de Inicialização', `Arquivo index.html não encontrado em: ${indexPath}\n\nVerifique se o aplicativo foi instalado corretamente.`);
-        throw new Error(`Arquivo index.html não encontrado em: ${indexPath}`);
-      }
-
-      mainWindow.loadFile(indexPath).catch(err => {
-        logger.error('MAIN_WINDOW', 'Erro ao carregar index.html:', err);
-        dialog.showErrorBox('Erro ao Iniciar', `Não foi possível carregar a interface do aplicativo: ${err.message}\n\nVerifique se o aplicativo foi instalado corretamente.`);
-        app.exit(1);
-      });
-    } catch (err) {
-      logger.error('MAIN_WINDOW', 'Erro ao processar caminho do index.html:', err);
+    // Carregar o arquivo index.html do aplicativo de forma otimizada
+    const indexPath = path.join(__dirname, 'index.html');
+    
+    mainWindow.loadFile(indexPath).catch(err => {
+      logger.error('MAIN_WINDOW', 'Erro ao carregar index.html:', err);
+      dialog.showErrorBox('Erro ao Iniciar', `Não foi possível carregar a interface do aplicativo: ${err.message}`);
       app.exit(1);
-    }
+    });
 
     mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
       logger.error('MAIN_WINDOW', `Falha ao carregar a URL ${validatedURL}`, { errorCode, errorDescription });
       dialog.showErrorBox('Erro ao Iniciar', `Não foi possível carregar a interface do aplicativo: ${errorDescription}`);
     });
 
-    mainWindow.webContents.on('did-finish-load', () => {
-      logger.info('MAIN_WINDOW', 'index.html carregado com sucesso (did-finish-load)');
-      // Removido mainWindow.focus() para evitar interferência com atalhos globais de outros aplicativos
-  });
-
     // Abrir DevTools em desenvolvimento
     if (process.env.NODE_ENV === 'development') {
       mainWindow.webContents.openDevTools();
-      logger.debug('MAIN_WINDOW', 'DevTools aberto em modo desenvolvimento');
     }
 
     // Quando a janela for fechada
     mainWindow.on('closed', function () {
       logger.debug('MAIN_WINDOW', 'Evento \'closed\' disparado para mainWindow.');
       mainWindow = null;
+    });
+    
+    // Adicionar manipulador para o evento 'close' para garantir que a aplicação seja encerrada corretamente
+    mainWindow.on('close', function (event) {
+      logger.debug('MAIN_WINDOW', 'Evento \'close\' disparado para mainWindow.');
+      
+      // Se não estiver no processo de encerramento, permitir o fechamento normal
+      if (!isQuitting) {
+        logger.debug('MAIN_WINDOW', 'Fechando a janela normalmente.');
+      }
     });
   } catch (error) {
     logger.error('MAIN_WINDOW', 'Erro ao criar janela principal:', error);
@@ -338,7 +411,7 @@ ipcMain.handle('export-books', async (event, format) => {
     }
     
     // Obter os livros do store
-    const books = store.get('books', []);
+    const books = getStore().get('books', []);
     logger.debug(`MAIN_IPC', 'export-books: ${books.length} livros encontrados para exportação`);
     
     if (books.length === 0) {
@@ -402,7 +475,7 @@ ipcMain.handle('parse-xlsx-and-save', async (event, fileContent) => {
         throw new Error('Falha ao converter planilha para JSON.');
     }
 
-    const currentBooks = store.get('books', []);
+    const currentBooks = getStore().get('books', []);
     let nextId = getNextBookId(); // Usa a função para obter o próximo ID disponível
 
     const importedBooks = jsonData.map(row => {
@@ -439,7 +512,7 @@ ipcMain.handle('parse-xlsx-and-save', async (event, fileContent) => {
     
     // No momento, a importação substitui toda a biblioteca.
     // Se desejar mesclar, a lógica precisará ser mais complexa aqui.
-    store.set('books', importedBooks);
+    getStore().set('books', importedBooks);
     logger.debug(`parse-xlsx-and-save', ${importedBooks.length} livros importados e salvos via XLSX.`);
 
     return { success: true, message: `${importedBooks.length} books imported successfully.` };
@@ -793,7 +866,7 @@ ipcMain.handle('process-and-save-csv', async (event, fileContent) => {
         }
 
         // --- Lógica de mesclagem ---
-        let currentBooks = store.get('books', []);
+        let currentBooks = getStore().get('books', []);
         let nextId = getNextBookId(); // Obter o próximo ID disponível
         const mergedBooks = [...currentBooks]; // Começa com os livros existentes
         let newBooksAddedCount = 0;
@@ -823,13 +896,13 @@ ipcMain.handle('process-and-save-csv', async (event, fileContent) => {
         }
 
         // Salvar a lista mesclada de volta no store
-        store.set('books', mergedBooks);
+        getStore().set('books', mergedBooks);
         logger.debug(`process-and-save-csv', ${newBooksAddedCount} novos livros adicionados. ${duplicatesIgnoredCount} duplicados ignorados. Total de livros no store: ${mergedBooks.length}.`);
         // --- Fim da lógica de mesclagem ---
 
         // Notificar o renderer que os livros foram atualizados
         if (mainWindow) {
-             mainWindow.webContents.send('books-updated', store.get('books', [])); // Envia a lista mesclada
+             mainWindow.webContents.send('books-updated', getStore().get('books', [])); // Envia a lista mesclada
         }
 
         return { success: true, message: `${newBooksAddedCount} livro(s) importado(s) com sucesso! (${duplicatesIgnoredCount} duplicados ignorados)` };
@@ -875,7 +948,7 @@ ipcMain.handle('process-and-save-html', async (event, { filePath, fileContent })
 ipcMain.handle('add-book-to-store', async (event, newBookData) => {
   logger.debug('add-book-to-store', 'Handler invocado com dados:', newBookData);
   try {
-    const books = store.get('books', []);
+    const books = getStore().get('books', []);
     const nextId = getNextBookId();
 
     const bookToAdd = {
@@ -888,7 +961,7 @@ ipcMain.handle('add-book-to-store', async (event, newBookData) => {
     };
 
     books.push(bookToAdd);
-    store.set('books', books);
+    getStore().set('books', books);
     logger.debug(`add-book-to-store', 'Livro adicionado ao store com ID: ${nextId}`, bookToAdd);
     
     // Notificar o renderer que os livros foram atualizados para que ele possa re-renderizar se necessário
@@ -908,7 +981,7 @@ ipcMain.handle('add-book-to-store', async (event, newBookData) => {
 ipcMain.handle('get-all-books', async () => {
   logger.debug('get-all-books', 'Handler invocado.');
   try {
-    const books = store.get('books', []);
+    const books = getStore().get('books', []);
     // Realizar migração de pagesRead para paginasLidas se necessário
     const migratedBooks = books.map(book => {
       if (typeof book.pagesRead !== 'undefined' && typeof book.paginasLidas === 'undefined') {
@@ -930,11 +1003,11 @@ ipcMain.handle('get-all-books', async () => {
     // Uma forma simples de verificar é comparar o JSON.stringify, mas pode ser custoso para listas grandes.
     // Uma verificação mais granular seria ideal, ou simplesmente salvar sempre que houver uma migração detectada.
     if (migratedBooks.some(book => typeof book.pagesRead !== 'undefined' && typeof book.paginasLidas === 'undefined')) { // Verifica se alguma migração ocorreu
-        store.set('books', migratedBooks);
+        getStore().set('books', migratedBooks);
         logger.debug('get-all-books', 'Livros migrados e salvos no store.');
     } else if (migratedBooks.some(book => typeof book.pagesRead !== 'undefined' && typeof book.paginasLidas !== 'undefined')) {
         // Esta condição é para o caso de remoção de pagesRead duplicada
-        store.set('books', migratedBooks);
+        getStore().set('books', migratedBooks);
         logger.debug('get-all-books', 'Propriedade pagesRead duplicada removida e livros salvos no store.');
     }
 
@@ -951,7 +1024,7 @@ ipcMain.handle('get-all-books', async () => {
 ipcMain.handle('delete-book', async (event, bookIdToDelete) => {
   logger.debug('delete-book', `Handler chamado para ID: ${bookIdToDelete}`);
   try {
-    let books = store.get('books', []);
+    let books = getStore().get('books', []);
     const initialLength = books.length;
     books = books.filter(book => String(book.id) !== String(bookIdToDelete));
 
@@ -961,7 +1034,7 @@ ipcMain.handle('delete-book', async (event, bookIdToDelete) => {
       return { success: false, error: 'Livro não encontrado para deleção.' }; 
     }
 
-    store.set('books', books);
+    getStore().set('books', books);
     logger.debug(`delete-book', 'Livro com ID ${bookIdToDelete} deletado. ${books.length} livros restantes.`);
     
     if (mainWindow) {
@@ -979,7 +1052,7 @@ ipcMain.handle('update-book', async (event, bookId, bookData) => {
   logger.debug('update-book', 'Handler invocado com:', { bookId, bookData });
   try {
     // Obter livros atuais do store
-    const books = store.get('books', []);
+    const books = getStore().get('books', []);
     
     // Encontrar o índice do livro a ser atualizado (comparação robusta)
     const bookIndex = books.findIndex(book => String(book.id) === String(bookId));
@@ -994,7 +1067,7 @@ ipcMain.handle('update-book', async (event, bookId, bookData) => {
     books[bookIndex] = { ...books[bookIndex], ...bookData };
     
     // Salvar de volta no store
-    store.set('books', books);
+    getStore().set('books', books);
     
     logger.debug('update-book', 'Livro atualizado com sucesso:', books[bookIndex]);
     return { success: true, book: books[bookIndex] };
@@ -1008,7 +1081,7 @@ ipcMain.handle('update-book', async (event, bookId, bookData) => {
 // Handler para deletar um livro do store
 ipcMain.handle('delete-book-in-store', async (event, bookIdToDelete) => {
   // Handler compatível com o canal usado no preload/renderer
-  let books = store.get('books', []);
+  let books = getStore().get('books', []);
   const initialLength = books.length;
   books = books.filter(book => String(book.id) !== String(bookIdToDelete));
 
@@ -1016,7 +1089,7 @@ ipcMain.handle('delete-book-in-store', async (event, bookIdToDelete) => {
     return { success: false, error: 'Livro não encontrado para deleção.' };
   }
 
-  store.set('books', books);
+  getStore().set('books', books);
   if (mainWindow) {
     mainWindow.webContents.send('books-updated', books);
   }
@@ -1026,6 +1099,15 @@ ipcMain.handle('delete-book-in-store', async (event, bookIdToDelete) => {
 // Sair quando todas as janelas estiverem fechadas, exceto no macOS.
 // No macOS é comum que aplicativos e sua barra de menu permaneçam ativos 
 // até que o usuário saia explicitamente com Cmd + Q
+// Variável para controlar se o aplicativo está sendo encerrado
+let isQuitting = false;
+
+// Evento disparado antes de tentar encerrar o aplicativo
+app.on('before-quit', function (event) {
+  logger.debug('app', 'Evento \'before-quit\' disparado.');
+  isQuitting = true;
+});
+
 app.on('window-all-closed', function () {
   logger.debug('app', 'Evento \'window-all-closed\' disparado.');
   if (process.platform !== 'darwin') {
@@ -1056,7 +1138,7 @@ process.on('uncaughtException', (error) => {
 // Handler para obter o histórico de sorteios
 ipcMain.handle('get-draw-history', async () => {
   try {
-    const history = store.get('drawHistory', []);
+    const history = getStore().get('drawHistory', []);
     return { success: true, data: history };
   } catch (error) {
     return { success: false, error: error.message };
@@ -1066,7 +1148,7 @@ ipcMain.handle('get-draw-history', async () => {
 // Handler para salvar o histórico de sorteios
 ipcMain.handle('set-draw-history', async (event, history) => {
   try {
-    store.set('drawHistory', history);
+    getStore().set('drawHistory', history);
     return { success: true };
   } catch (error) {
     return { success: false, error: error.message };
@@ -1103,9 +1185,9 @@ logger.debug('open-local-file', 'Handler definido no main.js.');
 ipcMain.handle('deleteBook', async (event, bookId) => {
     logger.debug('deleteBook', `Recebida solicitação para excluir livro com ID ${bookId}`);
     try {
-        const success = store.delete(`books.${bookId}`);
+        const success = getStore().delete(`books.${bookId}`);
         logger.debug('deleteBook', `Resultado da exclusão para ID ${bookId}: ${success}`);
-        // Opcional: Persistir mudanças imediatamente se store.delete não fizer isso
+        // Opcional: Persistir mudanças imediatamente se getStore().delete não fizer isso
         // store.save(); 
         return { success: success };
     } catch (error) {
@@ -1120,7 +1202,7 @@ ipcMain.handle('deleteSelectedBooks', async (event, bookIds) => {
     let failedIds = [];
     for (const bookId of bookIds) {
         try {
-            const success = store.delete(`books.${bookId}`);
+            const success = getStore().delete(`books.${bookId}`);
             logger.debug('deleteSelectedBooks', `Tentando excluir ID ${bookId}. Resultado: ${success}`);
             if (success) {
                 successCount++;
@@ -1212,7 +1294,7 @@ ipcMain.handle('delete-multiple-books-in-store', async (event, bookIds) => {
       return { success: false, error: 'IDs de livros ausentes ou inválidos.' };
     }
 
-    const currentBooks = store.get('books', []);
+    const currentBooks = getStore().get('books', []);
     logger.debug('delete-multiple-books-in-store', `${currentBooks.length} livros antes da exclusão.`);
 
     // Filtrar livros que NÃO estão na lista de IDs a serem excluídos
@@ -1222,7 +1304,7 @@ ipcMain.handle('delete-multiple-books-in-store', async (event, bookIds) => {
     const deletedCount = currentBooks.length - updatedBooks.length;
 
     // Salvar a lista filtrada de volta no store
-    store.set('books', updatedBooks);
+    getStore().set('books', updatedBooks);
 
     logger.debug('delete-multiple-books-in-store', `${updatedBooks.length} livros após a exclusão.`);
     logger.debug('delete-multiple-books-in-store', `${deletedCount} livro(s) excluído(s) com sucesso.`);
