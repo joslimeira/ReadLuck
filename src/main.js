@@ -165,7 +165,7 @@ let mainWindow;
 
 function createWindow() {
   try {
-    const iconPath = path.join(__dirname, 'assets/ReadLuck-Icone-Oficial-2025-Final.ico');
+    const iconPath = path.join(__dirname, '..', 'build', 'icon.ico');
     
     // Verificação assíncrona do ícone para não bloquear a inicialização
     const iconExists = fs.existsSync(iconPath);

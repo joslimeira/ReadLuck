@@ -1,6 +1,6 @@
 {
   "name": "ReadLuck",
-  "version": "1.0.0",
+  "version": "1.1",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
@@ -27,6 +27,7 @@
   "build": {
     "appId": "com.readluck.app",
     "productName": "ReadLuck",
+    "icon": "build/icon.ico",
     "directories": {
       "output": "dist",
       "buildResources": "src/assets"
@@ -47,7 +48,7 @@
           "arch": ["x64", "ia32"]
         }
       ],
-      "icon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico"
+      "icon": "build/icon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -57,9 +58,8 @@
       "createStartMenuShortcut": true,
       "shortcutName": "ReadLuck",
       "deleteAppDataOnUninstall": true,
-      "installerIcon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico",
-
-      "uninstallerIcon": "src/assets/ReadLuck-Icone-Oficial-2025-Final.ico",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
       "artifactName": "ReadLuck Setup ${version}.${ext}"
     },
     "portable": {
