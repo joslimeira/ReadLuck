@@ -1,7 +1,7 @@
 # 📚 ReadLuck
  
 
-![ReadLuck Screenshot](./assets/screenshots/READLUCK_PAGE1.png)
+![ReadLuck Screenshot](src/assets/screenshots/READLUCK_PAGE1.png)
 
 ---
 
